@@ -1,0 +1,30 @@
+.schedule-item table th, .schedule-item table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+    flex-wrap: wrap;
+  }
+  
+  .schedule-item table th:nth-child(1), .schedule-item table td:nth-child(1) {
+    width: 20%; /* OT ID column */
+  }
+  
+  .schedule-item table th:nth-child(2), .schedule-item table td:nth-child(2) {
+    width: 20%; /* Date column */
+  }
+  
+  .schedule-item table th:nth-child(3), .schedule-item table td:nth-child(3) {
+    width: 15%; /* Start Time column */
+  }
+  
+  .schedule-item table th:nth-child(4), .schedule-item table td:nth-child(4) {
+    width: 15%; /* End Time column */
+  }
+  
+  .schedule-item table th:nth-child(5), .schedule-item table td:nth-child(5) {
+    width: 25%; /* Doctor column */
+  }
+  
+  .schedule-item table th:nth-child(6), .schedule-item table td:nth-child(6) {
+    width: 25%; /* Patient Name column */
+  }

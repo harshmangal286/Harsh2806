@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Schedule Details</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- Firebase SDK -->
+    <script type="module">
+      // Import Firebase dependencies
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-analytics.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+
+      import {
+        getFirestore,
+        collection,
+        addDoc,
+        getDocs,
+        doc,
+        getDoc,
+        updateDoc,
+        deleteDoc,
+      } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyCaabCi83ItxJWjpwUvZ_PgN_Qt5g97I34",
+        authDomain: "operation-scheduled.firebaseapp.com",
+        databaseURL: "https://operation-scheduled-default-rtdb.firebaseio.com",
+        projectId: "operation-scheduled",
+        storageBucket: "operation-scheduled.appspot.com",
+        messagingSenderId: "445639738751",
+        appId: "1:445639738751:web:7f5cee34060ef82c78064a",
+        measurementId: "G-X69B4LMZ90",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const db = getFirestore(app);
+
+      // Function to load schedule data
+      async function loadSchedule() {
+        const scheduleList = document.getElementById("schedule-list");
+        const schedulesRef = collection(db, "schedules");
+        const schedulesSnapshot = await getDocs(schedulesRef);
+        let scheduleListHTML = "";
+
+        schedulesSnapshot.forEach((doc) => {
+          const schedule = doc.data();
+          scheduleListHTML += `
+          <div class="schedule-item">
+            <h3>OT ${schedule.otId} - ${schedule.date}</h3>
+            <p><strong>Start Time:</strong> ${schedule.startTime}</p>
+            <p><strong>End Time:</strong> ${schedule.endTime}</p>
+            <p><strong>Doctor:</strong> ${schedule.doctor}</p>
+            <p><strong>Patient name:</strong> ${schedule.patientName}</p>
+            <p><strong>Patient age:</strong> ${schedule.patientAge}</p>
+            <p><strong>Patient gender:</strong> ${schedule.patientGender}</p>
+            <p><strong>Patient address:</strong> ${schedule.patientAddress}</p>
+            <p><strong>Patient diagnosis:</strong> ${schedule.patientDiagnosis}</p>
+            <p><strong>Patient height:</strong> ${schedule.patientHeight}</p>
+            <p><strong>Patient weight:</strong> ${schedule.patientWeight}</p>
+            <p><strong>Patient blood type:</strong> ${schedule.patientBloodType}</p>
+            <p><strong>Patient allergies:</strong> ${schedule.patientAllergies}</p>
+            <p><strong>Patient contact:</strong> ${schedule.patientContact}</p>
+            <p><strong>Patient bed number:</strong> ${schedule.patientBedNo}</p>            
+            <p><strong>Procedure type:</strong> ${schedule.procedureType}</p>
+            <p><strong>Medications:</strong> ${schedule.medications}</p>
+            <p><strong>Pre-op events:</strong> ${schedule.preOpEvents}</p>
+            <p><strong>Post-op events:</strong> ${schedule.postOpEvents}</p>
+            <p><strong>Surgical reports:</strong> ${schedule.surgicalReports}</p>
+            <p><strong>Doctor's Remarks:</strong> ${schedule.doctorRemarks}</p>
+            <p><strong>Special Requirements:</strong> ${schedule.specialRequirements}</p>
+
+            <button onclick="deleteSchedule(${doc.id})">Delete</button>
+            <button onclick="editSchedule(${doc.id})">Edit</button>
+
+          </div>
+        `;
+        });
+
+        scheduleList.innerHTML = scheduleListHTML;
+      }
+
+      // Load schedule data on page load
+      document.addEventListener("DOMContentLoaded", loadSchedule);
+    </script>
+  </head>
+  <body>
+    <nav>
+      <h2>Schedule Details</h2>
+    </nav>
+    <div class="search-box">
+      <i class="fas fa-search"></i>
+      <input type="text" placeholder="Search here..." />
+    </div>
+    <section class="schedule-details">
+      <div id="schedule-list">
+        <!-- Schedule data will be loaded here -->
+      </div>
+    </section>
+  </body>
+</html>

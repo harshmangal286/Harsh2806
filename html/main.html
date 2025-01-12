@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OT Scheduler - Hospital Management System</title>
+    <link rel="stylesheet" href="main.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+
+<body>
+    <nav>
+        <div class="logo-name">
+            <div class="logo-image">
+                <img src="logo.jfif" alt="" />
+            </div>
+            <span class="logo_name">OT Scheduler</span>
+        </div>
+
+        <div class="menu-items">
+            <ul class="nav-links">
+                <li>
+                    <a href="#dashboard">
+                        <i class="fas fa-home"></i>
+                        <span class="link-name">Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="schedule-page.html">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span class="link-name">OT Schedule</span>
+                        <div id="schedule-section"></div>
+                    </a>
+                </li>
+                <li>
+                    <a href="doctor-details.html">
+                        <i class="fas fa-user-md"></i>
+                        <span class="link-name">Doctors</span>
+                        <div id="doctor-section"></div>
+                    </a>
+                </li>
+                <li>
+                    <a href="patients-deatils.html">
+                        <i class="fas fa-user"></i>
+                        <span class="link-name">Patients</span>
+                        <div id="patient-section"></div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#analytics">
+                        <i class="fas fa-chart-bar"></i>
+                        <span class="link-name">Analytics</span>
+                    </a>
+                </li>
+            </ul>
+
+            <ul class="logout-mode">
+                <li>
+                    <a href="#" id="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span class="link-name">Logout</span>
+                    </a>
+                </li>
+                <li class="mode">
+                    <a href="#">
+                        <i class="fas fa-moon"></i>
+                        <span class="link-name">Dark Mode</span>
+                    </a>
+                    <div class="mode-toggle">
+                        <span class="switch"></span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="dashboard">
+        <div class="top">
+            <i class="fas fa-bars sidebar-toggle"></i>
+            
+            <a href="login.html"><button type="button" id="login-btn">Login</button></a>
+            
+        </div>
+
+        <div class="dash-content">
+            <div class="overview">
+                <div class="title">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span class="text">Dashboard</span>
+                </div>
+                <div class="boxes">
+                    <div class="box box1">
+                        <i class="fas fa-calendar-check"></i>
+                        <span class="text">Total Schedules</span>
+                        <span class="number" id="total-surgeries">0</span>
+                    </div>
+                    <div class="box box2">
+                        <i class="fas fa-ambulance"></i>
+                        <span class="text">Emergency Schedules</span>
+                        <span class="number" id="emergency-surgeries">0</span>
+                    </div>
+                    <div class="box box3">
+                        <i class="fas fa-hospital"></i>
+                        <span class="text">Available OTs</span>
+                        <span class="number" id="available-ots">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ot-schedule">
+                <div class="title">
+                    <i class="fas fa-clock"></i>
+                    <span class="text">OT Schedule</span>
+                </div>
+                <div id="schedule-form">
+                    <h3>Add New Schedule</h3>
+                    <form id="new-schedule-form">
+                        <div class="schedule-input">
+                            <label for="ot-id">OT ID:</label>
+                            <input type="text" id="ot-id" required>
+
+                            <label for="schedule-date">Date:</label>
+                            <input type="date" id="schedule-date" required>
+                        </div>
+                        <div class="time-input">
+                            <label for="start-time">Start Time:</label>
+                            <input type="time" id="start-time" required>
+
+                            <label for="end-time">End Time:</label>
+                            <input type="time" id="end-time" required>
+                        </div>
+                    </form>
+                    <h3>Add Schedule Information</h3>
+                    <form id="schedule-info">
+                        <form class="doctorsdetails">
+                        <label for="doctors">Doctor:</label>
+                        <input type="text" id="doctors" required>
+
+                        <label for="assistant-surgeon">Assistant Surgeon:</label>
+                        <input type="text" id="assistant-surgeon">
+
+                        <label for="anesthesiologist">Anesthesiologist:</label>
+                        <input type="text" id="anesthesiologist" required>
+
+                        <label for="nurses">Nurses:</label>
+                        <input type="text" id="nurses">
+
+                        </form>
+                        <form class="patientdetails">
+                        <label for="patient-name">Patient Name:</label>
+                        <input type="text" id="patient-name" required>
+
+                        <label for="operation-type">Operation Type:</label>
+                        <input type="text" id="operation-type" required>
+
+                        <label for="anesthesia-type">Type of Anesthesia:</label>
+                        <input type="text" id="anesthesia-type" placeholder="Types" required>
+
+
+                        <label for="patient-age">Patient Age:</label>
+                        <input type="number" id="patient-age" required>
+
+                        <label for="patient-gender">Patient Gender:</label>
+                        <select id="patient-gender" required>
+                            <option value="">Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+
+                        <label for="patient-bloodgroup">Patient Blood Group:</label>
+                        <input type="text" id="patient-bloodgroup" required>
+
+                        <label for="patient-contact">Patient Contact:</label>
+                        <input type="tel" id="patient-contact" required>
+
+                        <label for="patient-allergies">Patient Allergies:</label>
+                        <input type="text" id="patient-allergies">
+
+                        <label for="patient-Diagnosis">Patient Diagnosis:</label>
+                        <input type="text" id="patient-Diagnosis" required>
+
+                        <label for="patient-bed_no">Patient Bed No:</label>
+                        <input type="text" id="patient-bed_no" required>
+
+                        <label for="procedure-type">Procedure Type:</label>
+                        <input type="text" id="procedure-type" required>
+
+                        <label for="patient-medications">Patient Medications:</label>
+                        <input type="text" id="patient-medications">
+                        </form>
+                        <form class="remarks">
+                        <label for="pre-op-events">Pre-operative Events:</label>
+                        <textarea id="pre-op-events"></textarea>
+
+                        <label for="post-op-events">Post-operative Events:</label>
+                        <textarea id="post-op-events"></textarea>
+
+                        <label for="surgical-reports">Surgical Reports:</label>
+                        <input type="file" id="surgical-reports" multiple>
+
+                        <label for="doctor-remarks">Doctor's Remarks:</label>
+                        <textarea id="doctor-remarks"></textarea>
+
+                        <label for="special-requirements">Special Requirements (Drugs, Instruments, Materials):</label>
+                        <textarea id="special-requirements"></textarea>
+                        </form>
+                    </form>
+
+                    <button id="submit-schedule">Add Schedule</button>
+                    <button id="emergency-schedule">Emergency</button>
+                </div>
+                <div id="schedule-list">
+                    <h1>schedules</h1>
+                    <div id="schedule-container"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer>
+        <p>&copy; 2024 Operation Scheduler for Hospital Management</p>
+    </footer>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script type="module" src="test.js"></script>
+</body>
+
+</html>

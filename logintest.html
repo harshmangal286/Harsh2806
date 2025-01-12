@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign In / Sign Up</title>
+    <link rel="stylesheet" href="css/login.css" />
+  </head>
+  <body>
+    <div id="authContainer" class="container">
+      <h2 id="authTitle" class="form-title">Sign In</h2>
+      <div id="authMessage" class="messageDiv" ></div>
+      <form id="authForm">
+        <div class="input-group">
+          <input type="email" id="email" placeholder=" " required />
+          <label for="email">Email</label>
+        </div>
+
+        <div class="input-group">
+          <input type="password" id="password" placeholder=" " required />
+          <label for="password">Password</label>
+        </div>
+
+        <div 
+          id="confirmPasswordGroup"
+          class="input-group"
+          style="display: none"
+        >
+          <input type="password" id="confirmPassword" placeholder=" " />
+          <label for="confirmPassword">Confirm Password</label>
+        </div>
+
+        <a href="#" class="recover">Recover Password</a>
+
+        <button type="submit" id="submitAuth">Sign In</button>
+      </form>
+
+      <div class="or">------------or------------</div>
+
+      <div class="icons">
+        <!-- Add social icons here if needed -->
+      </div>
+
+      <div class="links">
+        <span id="switchMessage">Don't have an account yet?</span>
+        <button id="switchAuthMode">Sign Up</button>
+      </div>
+    </div>
+
+    <script type="module" src="logintest.js"></script>
+  </body>
+</html>

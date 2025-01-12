@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Schedule Details</title>
+    <link
+      rel="stylesheet"
+      href="/operation schedular - Copy/css/doctor-details.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <!-- Firebase SDK -->
+    <script type="module">
+      // Firebase and Firestore imports (same as before)
+      // Firebase SDK imports
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-analytics.js";
+      import {
+        getFirestore,
+        collection,
+        getDocs,
+        doc,
+        getDoc,
+        updateDoc,
+        deleteDoc,
+      } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyCaabCi83ItxJWjpwUvZ_PgN_Qt5g97I34",
+        authDomain: "operation-scheduled.firebaseapp.com",
+        databaseURL: "https://operation-scheduled-default-rtdb.firebaseio.com",
+        projectId: "operation-scheduled",
+        storageBucket: "operation-scheduled.appspot.com",
+        messagingSenderId: "445639738751",
+        appId: "1:445639738751:web:7f5cee34060ef82c78064a",
+        measurementId: "G-X69B4LMZ90",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const db = getFirestore(app);
+
+      async function loadSchedule() {
+        const scheduleList = document.getElementById("schedule-list");
+        const schedulesRef = collection(db, "schedules");
+        const schedulesSnapshot = await getDocs(schedulesRef);
+        let scheduleListHTML = "";
+
+        schedulesSnapshot.forEach((doc) => {
+          const schedule = doc.data();
+          scheduleListHTML += `
+            <div class="schedule-item">
+                <h3>OT ${schedule.otId} - ${schedule.date}</h3>
+                <p><strong>Start Time:</strong> ${schedule.startTime}</p>
+                <p><strong>End Time:</strong> ${schedule.endTime}</p>
+                <p><strong>Doctor:</strong> ${schedule.doctor}</p>
+                <p><strong>Patient Name:</strong> ${schedule.patientName}</p>
+                <button class="edit-btn" data-id="${doc.id}">Edit</button>
+                <button class="delete-btn" data-id="${doc.id}">Delete</button>
+            </div>
+        `;
+        });
+
+        scheduleList.innerHTML = scheduleListHTML;
+        assignButtonEvents();
+      }
+
+      function assignButtonEvents() {
+        const editButtons = document.querySelectorAll(".edit-btn");
+        editButtons.forEach((button) => {
+          button.addEventListener("click", async (event) => {
+            const scheduleId = event.target.dataset.id;
+            const scheduleDoc = await getDoc(doc(db, "schedules", scheduleId));
+            const scheduleData = scheduleDoc.data();
+            document
+        .getElementById("schedule-form")
+        .addEventListener("submit", async (event) => {
+          
+          event.preventDefault(); // Prevent default form submission
+
+          const scheduleId = event.target.dataset.id; // Get the schedule ID from the form
+          const updatedData = {
+            otId: event.target.otId.value,
+            date: event.target.date.value,
+            startTime: event.target.startTime.value,
+            endTime: event.target.endTime.value,
+            doctor: event.target.doctor.value,
+            assistantSurgeon: event.target.assistantSurgeon.value,
+            anesthesiologist: event.target.anesthesiologist.value,
+            patientName: event.target.patientName.value,
+            operationType: event.target.operationType.value,
+            anesthesiaType: event.target.anesthesiaType.value,
+            patientAge: event.target.patientAge.value,
+            patientGender: event.target.patientGender.value,
+            patientBloodGroup: event.target.patientBloodGroup.value,
+            patientContact: event.target.patientContact.value,
+            patientAllergies: event.target.patientAllergies.value,
+            patientDiagnosis: event.target.patientDiagnosis.value,
+            patientBedNo: event.target.patientBedNo.value,
+            procedureType: event.target.procedureType.value,
+            patientMedications: event.target.patientMedications.value,
+            preOpEvents: event.target.preOpEvents.value,
+            postOpEvents: event.target.postOpEvents.value,
+            surgicalReports: event.target.surgicalReports.value,
+            doctorRemarks: event.target.doctorRemarks.value,
+            specialRequirements: event.target.specialRequirements.value,
+          };
+
+          await updateDoc(doc(db, "schedules", scheduleId), updatedData); // Update Firestore
+          loadSchedule(); // Reload schedules after update
+        });
+            
+            populateScheduleForm(scheduleData, scheduleId);
+          });
+        });
+
+        const deleteButtons = document.querySelectorAll(".delete-btn");
+        deleteButtons.forEach((button) => {
+          button.addEventListener("click", async (event) => {
+            const scheduleId = event.target.dataset.id;
+            await deleteDoc(doc(db, "schedules", scheduleId));
+            loadSchedule(); // Reload schedules after deletion
+          });
+        });
+      }
+
+      function populateScheduleForm(scheduleData, scheduleId) {
+        const scheduleForm = document.getElementById("schedule-form");
+        scheduleForm.otId.value = scheduleData.otId;
+        scheduleForm.date.value = scheduleData.date;
+        scheduleForm.startTime.value = scheduleData.startTime;
+        scheduleForm.endTime.value = scheduleData.endTime;
+        scheduleForm.doctor.value = scheduleData.doctor;
+        scheduleForm.assistantSurgeon.value = scheduleData.assistantSurgeon;
+        scheduleForm.anesthesiologist.value = scheduleData.anesthesiologist;
+        scheduleForm.patientName.value = scheduleData.patientName;
+        scheduleForm.operationType.value = scheduleData.operationType;
+        scheduleForm.anesthesiaType.value = scheduleData.anesthesiaType;
+        scheduleForm.patientAge.value = scheduleData.patientAge;
+        scheduleForm.patientGender.value = scheduleData.patientGender;
+        scheduleForm.patientBloodGroup.value = scheduleData.patientBloodGroup;
+        scheduleForm.patientContact.value = scheduleData.patientContact;
+        scheduleForm.patientAllergies.value = scheduleData.patientAllergies;
+        scheduleForm.patientDiagnosis.value = scheduleData.patientDiagnosis;
+        scheduleForm.patientBedNo.value = scheduleData.patientBedNo;
+        scheduleForm.procedureType.value = scheduleData.procedureType;
+        scheduleForm.patientMedications.value = scheduleData.patientMedications;
+        scheduleForm.preOpEvents.value = scheduleData.preOpEvents;
+        scheduleForm.postOpEvents.value = scheduleData.postOpEvents;
+        scheduleForm.surgicalReports.value = scheduleData.surgicalReports;
+        scheduleForm.doctorRemarks.value = scheduleData.doctorRemarks;
+        scheduleForm.specialRequirements.value =
+          scheduleData.specialRequirements;
+        scheduleForm.dataset.id = scheduleId; // Store schedule ID in form for submission
+      }
+
+      // Event listener for form submission
+     
+
+      // Load schedule data on page load
+      document.addEventListener("DOMContentLoaded", loadSchedule);
+    </script>
+  </head>
+  <body>
+    <nav>
+      <h2>Schedule Details</h2>
+    </nav>
+    <div class="search-box">
+      <i class="fas fa-search"></i>
+      <input type="text" placeholder="Search here..." />
+    </div>
+
+    <section class="schedule-details">
+      <div id="schedule-list">
+        <!-- Schedule data will be loaded here -->
+      </div>
+
+      <!-- Schedule Editing Form -->
+      <div class="schedule-edit" style="display: none;">
+        <h3>Edit Schedule</h3>
+        <form id="schedule-form">
+          <input type="hidden" name="scheduleId" />
+          <label for="otId">OT ID:</label>
+          <input type="text" id="otId" name="otId" required />
+          <label for="date">Date:</label>
+          <input type="date" id="date" name="date" required />
+          <label for="startTime">Start Time:</label>
+          <input type="time" id="startTime" name="startTime" required />
+          <label for="endTime">End Time:</label>
+          <input type="time" id="endTime" name="endTime" required />
+          <label for="doctor">Doctor:</label>
+          <input type="text" id="doctor" name="doctor" required />
+          <label for="assistantSurgeon">Assistant Surgeon:</label>
+          <input type="text" id="assistantSurgeon" name="assistantSurgeon" />
+          <label for="anesthesiologist">Anesthesiologist:</label>
+          <input type="text" id="anesthesiologist" name="anesthesiologist" />
+          <label for="patientName">Patient Name:</label>
+          <input type="text" id="patientName" name="patientName" required />
+          <label for="operationType">Operation Type:</label>
+          <input type="text" id="operationType" name="operationType" />
+          <label for="anesthesiaType">Anesthesia Type:</label>
+          <input type="text" id="anesthesiaType" name="anesthesiaType" />
+          <label for="patientAge">Patient Age:</label>
+          <input type="number" id="patientAge" name="patientAge" required />
+          <label for="patientGender">Patient Gender:</label>
+          <select id="patientGender" name="patientGender" required>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+          <label for="patientBloodGroup">Patient Blood Group:</label>
+          <input type="text" id="patientBloodGroup" name="patientBloodGroup" />
+          <label for="patientContact">Patient Contact:</label>
+          <input type="text" id="patientContact" name="patientContact" />
+          <label for="patientAllergies">Patient Allergies:</label>
+          <input type="text" id="patientAllergies" name="patientAllergies" />
+          <label for="patientDiagnosis">Patient Diagnosis:</label>
+          <input type="text" id="patientDiagnosis" name="patientDiagnosis" />
+          <label for="patientBedNo">Patient Bed No:</label>
+          <input type="text" id="patientBedNo" name="patientBedNo" />
+          <label for="procedureType">Procedure Type:</label>
+          <input type="text" id="procedureType" name="procedureType" />
+          <label for="patientMedications">Patient Medications:</label>
+          <input
+            type="text"
+            id="patientMedications"
+            name="patientMedications"
+          />
+          <label for="preOpEvents">Pre-Op Events:</label>
+          <input type="text" id="preOpEvents" name="preOpEvents" />
+          <label for="postOpEvents">Post-Op Events:</label>
+          <input type="text" id="postOpEvents" name="postOpEvents" />
+          <label for="surgicalReports">Surgical Reports:</label>
+          <input type="text" id="surgicalReports" name="surgicalReports" />
+          <label for="doctorRemarks">Doctor Remarks:</label>
+          <input type="text" id="doctorRemarks" name="doctorRemarks" />
+          <label for="specialRequirements">Special Requirements:</label>
+          <input
+            type="text"
+            id="specialRequirements"
+            name="specialRequirements"
+          />
+          <button type="submit">Update Schedule</button>
+        </form>
+      </div>
+    </section>
+  </body>
+</html>
